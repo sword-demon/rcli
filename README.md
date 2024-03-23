@@ -81,3 +81,21 @@ cargo nextest 是一个 Rust 增强测试工具。
 ```bash
 cargo install cargo-nextest --locked
 ```
+
+## 处理返回结果
+
+```bash
+cargo add anyhow
+```
+
+## 处理 csv
+
+```bash
+cargo add csv
+```
+
+## 使用 serde
+
+```bash
+cargo add serde --features derive
+```

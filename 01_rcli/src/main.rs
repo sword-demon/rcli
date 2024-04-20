@@ -1,38 +1,14 @@
-use anyhow::{Ok, Result};
-use serde::{Deserialize, Serialize};
-use std::fs::File;
-
-#[allow(dead_code)]
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Player {
-    #[serde(rename = "Name")]
-    pub name: String,
-    #[serde(rename = "Position")]
-    pub position: String,
-    #[serde(rename = "DOB")]
-    pub dob: String,
-    #[serde(rename = "Nationality")]
-    pub nationality: String,
-    #[serde(rename = "Kit Number")]
-    pub number: u8,
-}
+use anyhow::Result;
+use clap::Parser;
+use rcli::{process_csv, Opts, SubCommand};
 
 fn main() -> Result<()> {
-    // 拿到文件的内容
-    let file = File::open("assets/juventus.csv")?;
-    let mut reader = csv::ReaderBuilder::new()
-        .has_headers(true)
-        .from_reader(file);
-    for result in reader.deserialize() {
-        let record: Player = result?;
-        println!("{:?}", record.to_json()?);
+    let opts = Opts::parse();
+    match opts.cmd {
+        SubCommand::Csv(opts) => {
+            // String 所以这里使用引用类型 去借用一下
+            process_csv(&opts.input, &opts.output)?;
+        }
     }
     Ok(())
-}
-
-impl Player {
-    pub fn to_json(&self) -> Result<String> {
-        let json = serde_json::to_string(self)?;
-        Ok(json)
-    }
 }

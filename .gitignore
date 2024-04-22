@@ -1,6 +1,6 @@
 /target
 .idea
 .vscode
-output.json
-output.yaml
-output.toml
+/output.json
+/output.yaml
+/output.toml

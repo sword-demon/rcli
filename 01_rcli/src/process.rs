@@ -37,6 +37,8 @@ pub fn process_csv(input: &str, output: String, format: OutPutFormat) -> Result<
         ret.push(json_value);
     }
 
+    // println!("{:?}", &HashMap::from([("data", ret)]));
+
     let content: String = match format {
         OutPutFormat::Json => serde_json::to_string_pretty(&ret)?,
         OutPutFormat::Yaml => serde_yaml::to_string(&ret)?,

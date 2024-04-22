@@ -1,7 +1,11 @@
 use anyhow::Result;
+use core::fmt;
 use csv::Reader;
 use serde::{Deserialize, Serialize};
-use std::fs;
+use serde_json::Value;
+use std::{collections::HashMap, fs};
+
+use crate::opts::OutPutFormat;
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize, Serialize)]
@@ -19,17 +23,34 @@ pub struct Player {
     pub number: u8,
 }
 
-pub fn process_csv(input: &str, output: &str) -> Result<()> {
+pub fn process_csv(input: &str, output: String, format: OutPutFormat) -> Result<()> {
     let mut reader = Reader::from_path(input)?;
     let mut ret = Vec::with_capacity(128);
-    for result in reader.deserialize() {
-        let record: Player = result?;
-        ret.push(record);
+    let headers = reader.headers()?.clone();
+    for result in reader.records() {
+        let record = result?;
+        // headers.iter() -> 使用 headers 的迭代器
+        // record.iter() -> 使用 record 的迭代器
+        // zip() 将 2 个迭代器合并为一个元组的迭代器 [(header, record), ...]
+        // collect::<Value>() -> 将元组的迭代器转换为 JSON Value
+        let json_value = headers.iter().zip(record.iter()).collect::<Value>();
+        ret.push(json_value);
     }
 
-    let json = serde_json::to_string_pretty(&ret)?;
+    let content: String = match format {
+        OutPutFormat::Json => serde_json::to_string_pretty(&ret)?,
+        OutPutFormat::Yaml => serde_yaml::to_string(&ret)?,
+        OutPutFormat::Toml => toml::to_string_pretty(&HashMap::from([("data", ret)]))?,
+    };
+
     // 写入输出文件
-    fs::write(output, json)?;
+    fs::write(output, content)?;
 
     Ok(())
+}
+
+impl fmt::Display for OutPutFormat {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", Into::<&str>::into(*self))
+    }
 }

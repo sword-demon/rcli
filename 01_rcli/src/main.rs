@@ -1,6 +1,6 @@
 use anyhow::Result;
 use clap::Parser;
-use rcli::{process_csv, Opts, SubCommand};
+use rcli::{process_csv, process_genpass, Opts, SubCommand};
 
 fn main() -> Result<()> {
     let opts = Opts::parse();
@@ -16,6 +16,13 @@ fn main() -> Result<()> {
             // String 所以这里使用引用类型 去借用一下
             process_csv(&opts.input, output, opts.format)?;
         }
+        SubCommand::GenPass(opts) => process_genpass(
+            opts.length,
+            opts.uppercase,
+            opts.lowercase,
+            opts.number,
+            opts.symbol,
+        )?,
     }
     Ok(())
 }

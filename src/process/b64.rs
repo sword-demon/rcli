@@ -45,7 +45,7 @@ pub fn process_decode(input: &str, format: Base64Format) -> anyhow::Result<()> {
 use anyhow::Result;
 #[test]
 fn test_encode() -> Result<()> {
-    let input = "cargo.toml";
+    let input = "Cargo.toml";
     let format = Base64Format::UrlSafe;
     process_encode(input, format)?;
 

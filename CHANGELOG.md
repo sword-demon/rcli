@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 ---
+## [1-9-base64](https://github.com/tyrchen/geektime-rust-live-coding/compare/v1-8-genpass..v1-9-base64) - 2024-04-24
+
+### Miscellaneous Chores
+
+- changelog - ([2171996](https://github.com/tyrchen/geektime-rust-live-coding/commit/21719960b62d690500fb8f56eeb6d40080c153eb)) - wxvirus
+
+### Other
+
+- wx, feat: use base64 to generate some text and decode it - ([05798f1](https://github.com/tyrchen/geektime-rust-live-coding/commit/05798f1ed4a9b81d6a95ae3d88f0223ce6e153c0)) - wxvirus
+
+---
 ## [1-8-genpass] - 2024-04-23
 
 ### Miscellaneous Chores

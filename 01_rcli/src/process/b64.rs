@@ -47,7 +47,7 @@ use anyhow::Result;
 fn test_encode() -> Result<()> {
     let input = "cargo.toml";
     let format = Base64Format::UrlSafe;
-    assert!(process_encode(input, format).is_ok());
+    process_encode(input, format)?;
 
     Ok(())
 }

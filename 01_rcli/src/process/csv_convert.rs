@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{collections::HashMap, fs};
 
-use crate::opts::OutPutFormat;
+use crate::cli::OutPutFormat;
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize, Serialize)]

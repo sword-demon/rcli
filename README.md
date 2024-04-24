@@ -98,4 +98,18 @@ cargo add csv
 
 ```bash
 cargo add serde --features derive
+cargo add serde-json
+cargo add serde-yaml
+```
+
+## 处理 toml
+
+```bash
+cargo add toml
+```
+
+## 处理 base64
+
+```bash
+cargo add base64
 ```

@@ -1,4 +1,4 @@
-# Geektime Rust 语言训练营
+# Rust 语言训练营
 
 ## 环境设置
 
@@ -58,6 +58,12 @@ Cargo deny 是一个 Cargo 插件，可以用于检查依赖的安全性。
 cargo install --locked cargo-deny
 ```
 
+检测依赖
+
+```bash
+cargo deny check -d
+```
+
 ### 安装 typos
 
 typos 是一个拼写检查工具。
@@ -74,6 +80,12 @@ git cliff 是一个生成 changelog 的工具。
 cargo install git-cliff
 ```
 
+生成`changelog.md`
+
+```bash
+git cliff -o CHANGELOG.md
+```
+
 ### 安装 cargo nextest
 
 cargo nextest 是一个 Rust 增强测试工具。
@@ -87,6 +99,8 @@ cargo install cargo-nextest --locked
 ```bash
 cargo add anyhow
 ```
+
+>经常有`anyhow:Ok;` 引用的问题
 
 ## 处理 csv
 
@@ -112,4 +126,45 @@ cargo add toml
 
 ```bash
 cargo add base64
+```
+
+## base64 解密解密
+
+```bash
+cargo run -- base64 encode -i cargo.toml > fixtures/standard_b64.txt
+cargo run -- base64 decode --format urlsafe -i fixtures/b64.txt
+```
+
+## 运行所有的测试代码
+
+```bash
+cargo nextest run --all-features
+```
+
+## Hash 库 blake3
+
+现在认为`sha-1`和`md5`都是都要比`blake`的差，以及处于淘汰的`hash`算法，是不安全的。
+
+[https://github.com/BLAKE3-team/BLAKE3](https://github.com/BLAKE3-team/BLAKE3)
+
+```bash
+cargo add blake3
+```
+
+## 非对称加密库`ed25519_dalek`
+```bash
+cargo add ed25519_dalek
+```
+
+### 验证
+````bash
+cargo run -- genpass -l 32 > fixtures/blake3.txt
+
+cargo run -- text sign -k fixtures/blake3.txt
+>输入: hello
+LJeaB_4zDSzWw_weWkVCvg9OMyWVEOKBD-yz_gpguiQ
+
+cargo run -- text verify -k fixtures/blake3.txt --sig LJeaB_4zDSzWw_weWkVCvg9OMyWVEOKBD-yz_gpguiQ
+>输入: hello
+true
 ```

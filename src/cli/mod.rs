@@ -1,6 +1,7 @@
 mod base64;
 mod csv_opts;
 mod genpass;
+mod http;
 mod text;
 
 use std::path::{Path, PathBuf};
@@ -12,6 +13,7 @@ use self::{csv_opts::CsvOpts, genpass::GenPassOpts};
 pub use self::{
     base64::{Base64Format, Base64SubCommand},
     csv_opts::OutPutFormat,
+    http::HttpSubCommand,
     text::{TextSignFormat, TextSubCommand},
 };
 
@@ -35,6 +37,8 @@ pub enum SubCommand {
     Base64(Base64SubCommand),
     #[command(subcommand)]
     Text(TextSubCommand),
+    #[command(subcommand)]
+    Http(HttpSubCommand),
 }
 
 fn verify_file(filename: &str) -> anyhow::Result<String, String> {

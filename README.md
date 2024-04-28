@@ -199,3 +199,52 @@ cargo run -- text verify -k fixtures/edd25519.pk --format ed25519 --sig VRT9gZx6
 hello!
 true
 ```
+
+## tokio
+
+- rt
+- rt-multi-thread
+- marcos
+
+这 3 个基本是必加的
+
+```bash
+cargo add tokio --features rt --features rt-multi-thread --features macros --features net --features fs
+```
+
+## tracing
+
+```bash
+cargo add tracing
+cargo add tracing-subscriber --features env-filter
+```
+
+这样命令就可以使用`RUST_LOG=debug cargo run`的方式执行
+
+```bash
+RUST_LOG=info cargo run -- http serve
+```
+
+## axum
+
+```bash
+cargo add axum --features http2 --features query --features tracing
+```
+
+## test
+
+```text
+### test index page
+
+GET http://127.0.0.1:8080
+```
+
+```text
+HTTP/1.1 200 OK
+content-type: text/plain; charset=utf-8
+content-length: 11
+date: Sun, 28 Apr 2024 15:26:49 GMT
+
+hello world
+
+```

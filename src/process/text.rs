@@ -1,9 +1,10 @@
 use std::{fs, io::Read, path::Path};
 
-use crate::{get_reader, TextSignFormat};
+use crate::{get_reader, process_genpass, TextSignFormat};
 use anyhow::{Ok, Result};
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine as _};
 use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
+use rand::rngs::OsRng;
 
 pub trait TextSign {
     /// Sign the data from the reader and return the signature
@@ -26,6 +27,10 @@ pub trait KeyLoader {
         Self: Sized;
 }
 
+pub trait KeyGenerator {
+    fn generate() -> Result<Vec<Vec<u8>>>;
+}
+
 pub struct Blake3 {
     key: [u8; 32],
 }
@@ -38,7 +43,7 @@ pub struct Ed25519Verifier {
     key: VerifyingKey,
 }
 
-pub fn process_text_sign(input: &str, key: &str, format: TextSignFormat) -> Result<()> {
+pub fn process_text_sign(input: &str, key: &str, format: TextSignFormat) -> Result<String> {
     let mut reader = get_reader(input)?;
 
     let signed = match format {
@@ -52,9 +57,9 @@ pub fn process_text_sign(input: &str, key: &str, format: TextSignFormat) -> Resu
         }
     };
     let signed = URL_SAFE_NO_PAD.encode(signed);
-    println!("{}", signed);
+    // println!("{}", signed);
 
-    Ok(())
+    Ok(signed)
 }
 
 pub fn process_text_verify(
@@ -62,7 +67,7 @@ pub fn process_text_verify(
     key: &str,
     sig: &str,
     format: TextSignFormat,
-) -> Result<()> {
+) -> Result<bool> {
     let mut reader = get_reader(input)?;
     let sig = URL_SAFE_NO_PAD.decode(sig)?;
 
@@ -76,9 +81,15 @@ pub fn process_text_verify(
             verifier.verify(&mut reader, &sig)?
         }
     };
-    println!("{}", valid);
 
-    Ok(())
+    Ok(valid)
+}
+
+pub fn process_generate(format: TextSignFormat) -> Result<Vec<Vec<u8>>> {
+    match format {
+        TextSignFormat::Blake3 => Blake3::generate(),
+        TextSignFormat::Ed25519 => Ed25519Signer::generate(),
+    }
 }
 
 impl TextSign for Blake3 {
@@ -127,6 +138,25 @@ impl KeyLoader for Blake3 {
     fn load(path: impl AsRef<Path>) -> Result<Self> {
         let key = fs::read(path)?;
         Self::try_new(&key)
+    }
+}
+
+impl KeyGenerator for Blake3 {
+    fn generate() -> Result<Vec<Vec<u8>>> {
+        let key = process_genpass(32, true, true, true, true)?;
+        let key = key.as_bytes().to_vec();
+        Ok(vec![key])
+    }
+}
+
+impl KeyGenerator for Ed25519Signer {
+    fn generate() -> Result<Vec<Vec<u8>>> {
+        let mut csprng = OsRng;
+        // 需要 rand_core 这个 features
+        let sk = SigningKey::generate(&mut csprng);
+        let pk = sk.verifying_key().to_bytes().to_vec();
+        let sk = sk.as_bytes().to_vec();
+        Ok(vec![sk, pk])
     }
 }
 

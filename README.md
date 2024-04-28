@@ -168,3 +168,33 @@ cargo run -- text verify -k fixtures/blake3.txt --sig LJeaB_4zDSzWw_weWkVCvg9OMy
 >输入: hello
 true
 ```
+
+## 文本前面
+
+```bash
+cargo run -- text generate -o fixtures
+   Compiling rcli v0.1.0 (/Users/xxx/RustProjects/rcli)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.70s
+     Running `/Users/xxx/.target/debug/rcli text generate -o fixtures`
+TextKeyGenerateOpts { format: Blake3, output: "fixtures" }
+cargo run -- text generate -o fixtures --format ed25519
+    Finished dev [unoptimized + debuginfo] target(s) in 0.03s
+     Running `/Users/xxx/.target/debug/rcli text generate -o fixtures --format ed25519`
+TextKeyGenerateOpts { format: Ed25519, output: "fixtures" }
+cargo run -- text sign -k fixtures/edd25519.sk --format ed25519
+   Compiling rcli v0.1.0 (/Users/xxx/RustProjects/rcli)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.75s
+     Running `/Users/xxx/.target/debug/rcli text sign -k fixtures/edd25519.sk --format ed25519`
+hello!
+sign: VRT9gZx6jPIk14KtOBT9OwIrJvWS8ST__OgK6oPPH7nHzflH1SCHpSFPPjgEEhOXhPjPndK1k6ePIE4kDimGCA
+cargo run -- text verify -k fixtures/edd25519.sk --format ed25519 --sig VRT9gZx6jPIk14KtOBT9OwIrJvWS8ST__OgK6oPPH7nHzflH1SCHpSFPPjgEEhOXhPjPndK1k6ePIE4kDimGCA
+    Finished dev [unoptimized + debuginfo] target(s) in 0.10s
+     Running `/Users/xxx/.target/debug/rcli text verify -k fixtures/edd25519.sk --format ed25519 --sig VRT9gZx6jPIk14KtOBT9OwIrJvWS8ST__OgK6oPPH7nHzflH1SCHpSFPPjgEEhOXhPjPndK1k6ePIE4kDimGCA`
+hello!
+false
+cargo run -- text verify -k fixtures/edd25519.pk --format ed25519 --sig VRT9gZx6jPIk14KtOBT9OwIrJvWS8ST__OgK6oPPH7nHzflH1SCHpSFPPjgEEhOXhPjPndK1k6ePIE4kDimGCA
+    Finished dev [unoptimized + debuginfo] target(s) in 0.18s
+     Running `/Users/xxx/.target/debug/rcli text verify -k fixtures/edd25519.pk --format ed25519 --sig VRT9gZx6jPIk14KtOBT9OwIrJvWS8ST__OgK6oPPH7nHzflH1SCHpSFPPjgEEhOXhPjPndK1k6ePIE4kDimGCA`
+hello!
+true
+```

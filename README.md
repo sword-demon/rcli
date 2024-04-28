@@ -157,7 +157,8 @@ cargo add ed25519_dalek
 ```
 
 ### 验证
-````bash
+
+```bash
 cargo run -- genpass -l 32 > fixtures/blake3.txt
 
 cargo run -- text sign -k fixtures/blake3.txt

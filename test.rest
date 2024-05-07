@@ -1,3 +1,9 @@
 ### test index page
 
 GET http://127.0.0.1:8080/Cargo.toml
+
+
+### test static file with tower-http
+
+GET http://127.0.0.1:8080/Cargo.toml
+Range: bytes=0-100

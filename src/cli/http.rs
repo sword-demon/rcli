@@ -10,6 +10,7 @@ pub enum HttpSubCommand {
     Serve(HttpServeOpts),
 }
 
+// HTTP Server Options
 #[derive(Debug, Parser)]
 pub struct HttpServeOpts {
     #[arg(short, long, value_parser = verify_path, default_value = ".")]

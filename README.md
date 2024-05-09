@@ -273,3 +273,21 @@ Options:
   -h, --help     Print help
   -V, --version  Print version
 ```
+
+## enum dispatch
+
+```bash
+cargo add enum_dispatch
+```
+
+## 重构后测试历史命令
+
+```bash
+RUST_LOG=info rcli http serve
+rcli text sign -k fixtures/ed25519.sk --format ed25519
+rcli text generate -o fixtures --format ed25519
+rcli text sign -k fixtures/ed25519.sk --format ed25519
+rcli text verify -k fixtures/ed25519.sk --format ed25519 -sig fRrgj334WL-Z9M30ThWTRZldgUVH_uqjclGzSb3ReQAXvnzkmoXHoFyZ6zEY8bR0mT_mNPHmjVIprnC5-8W3CA
+rcli text verify -k fixtures/ed25519.sk --format ed25519 --sig fRrgj334WL-Z9M30ThWTRZldgUVH_uqjclGzSb3ReQAXvnzkmoXHoFyZ6zEY8bR0mT_mNPHmjVIprnC5-8W3CA
+rcli text verify -k fixtures/ed25519.pk --format ed25519 --sig fRrgj334WL-Z9M30ThWTRZldgUVH_uqjclGzSb3ReQAXvnzkmoXHoFyZ6zEY8bR0mT_mNPHmjVIprnC5-8W3C
+```

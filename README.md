@@ -248,3 +248,28 @@ date: Sun, 28 Apr 2024 15:26:49 GMT
 hello world
 
 ```
+
+## 本地安装使用本项目
+
+```bash
+cargo install --path .
+```
+
+```bash
+rcli
+Simple program to deal with csv
+
+Usage: rcli <COMMAND>
+
+Commands:
+  csv      Show csv, or convert CSV to other formats
+  genpass  generate a random password
+  base64
+  text
+  http
+  help     Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+```

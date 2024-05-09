@@ -11,3 +11,8 @@ pub use process::{
     process_http_serve, process_text_sign, process_text_verify,
 };
 pub use utils::*;
+
+#[allow(async_fn_in_trait)]
+pub trait CmdExector {
+    async fn execute(self) -> anyhow::Result<()>;
+}

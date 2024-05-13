@@ -2,6 +2,7 @@ mod base64;
 mod csv_opts;
 mod genpass;
 mod http;
+mod jwt;
 mod text;
 
 use std::path::{Path, PathBuf};
@@ -9,7 +10,7 @@ use std::path::{Path, PathBuf};
 use clap::Parser;
 use enum_dispatch::enum_dispatch;
 
-pub use self::{base64::*, csv_opts::*, genpass::*, http::*, text::*};
+pub use self::{base64::*, csv_opts::*, genpass::*, http::*, jwt::*, text::*};
 
 /// Simple program to deal with csv
 #[derive(Debug, Parser)]
@@ -28,12 +29,18 @@ pub enum SubCommand {
 
     #[command(name = "genpass", about = "generate a random password")]
     GenPass(GenPassOpts),
+
     #[command(subcommand, about = "Base64 encode/decode")]
     Base64(Base64SubCommand),
     #[command(subcommand, about = "Text sign/verify")]
     Text(TextSubCommand),
     #[command(subcommand, about = "HTTP server")]
     Http(HttpSubCommand),
+
+    #[command(name = "genjwt", about = "generate a jwt token")]
+    GenJwt(GenJwt),
+    #[command(name = "verifyjwt", about = "validate a jwt token")]
+    ValidateJwt(ValidateJwt),
 }
 
 // impl CmdExector for SubCommand {

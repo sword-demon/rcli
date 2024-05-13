@@ -6,6 +6,7 @@ license = "MIT"
 
 [dependencies]
 anyhow = "1.0.81"
+askama = "0.12.1"
 axum = { version = "0.7.5", features = ["http2", "query", "tracing"] }
 base64 = "0.22.0"
 blake3 = "1.5.1"

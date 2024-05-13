@@ -1,7 +1,10 @@
 use anyhow::Result;
+use askama::Template;
+
 use axum::{
-    extract::{Path, State},
+    extract::{self, Path, State},
     http::StatusCode,
+    response::{Html, IntoResponse},
     routing::get,
     Router,
 };
@@ -25,6 +28,7 @@ pub async fn process_http_serve(path: PathBuf, port: u16) -> Result<()> {
     let router = Router::new()
         .route("/*path", get(file_handler))
         .nest_service("/tower", ServeDir::new(path))
+        .route("/greet/:name", get(greet))
         .with_state(Arc::new(state));
 
     // run our app with hyper, listening globally on port 3000
@@ -61,6 +65,35 @@ async fn file_handler(
                 warn!("Error reading file: {:?}", e);
                 (StatusCode::INTERNAL_SERVER_ERROR, e.to_string())
             }
+        }
+    }
+}
+
+async fn greet(extract::Path(name): extract::Path<String>) -> impl IntoResponse {
+    let template = HelloTemplate { name };
+    HtmlTemplate(template)
+}
+
+#[derive(Template)]
+#[template(path = "hello.html")]
+struct HelloTemplate {
+    name: String,
+}
+
+struct HtmlTemplate<T>(T);
+
+impl<T> IntoResponse for HtmlTemplate<T>
+where
+    T: Template,
+{
+    fn into_response(self) -> axum::response::Response {
+        match self.0.render() {
+            Ok(html) => Html(html).into_response(),
+            Err(err) => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("Failed to render template. Error: {err}"),
+            )
+                .into_response(),
         }
     }
 }
